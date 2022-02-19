@@ -1,30 +1,40 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view/>
+<notifications position="bottom right" width="500px"/>
+  <router-view 
+  :users="users"
+  :posts="posts"
+  :comments="comments"
+  />
 </template>
 
+<script>
+export default {
+  data(){
+    return {
+      users: [],
+      posts: [],
+      comments: []
+    }
+  },
+  mounted() {
+      fetch("https://jsonplaceholder.typicode.com/users")
+        .then(r => r.json())
+        .then(r => this.users = r);
+        fetch("https://jsonplaceholder.typicode.com/posts")
+        .then(r => r.json())
+        .then(r => this.posts = r);
+        fetch("https://jsonplaceholder.typicode.com/comments")
+        .then(r => r.json())
+        .then(r => this.comments = r);
+  },
+  watch:{
+    $route (to){
+        this.$notify('Current route: ' + to.fullPath)
+    }
+} 
+}
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>
